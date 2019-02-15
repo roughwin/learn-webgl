@@ -30,12 +30,19 @@ export default function c1(canvas) {
   var offset = 0;        // 从缓冲起始位置开始读取
   gl.vertexAttribPointer(positionAttributeLocation, size, type, normalize, stride, offset);
 
-  for(let i = 0; i < 1; i++) {
+  setInterval(() => {
+    randomDraw(gl)
+    randomDraw(gl)
+    randomDraw(gl)
+  }, 1000);
+  function randomDraw(gl) {
     setRecatngle(gl, randomInt(300), randomInt(300), randomInt(300), randomInt(300));
     gl.uniform4f(colorUniformLocation, Math.random(), Math.random(), Math.random(), 1);
     gl.drawArrays(gl.TRIANGLES, 0, 6);
   }
 }
+
+
 
 function randomInt(range) {
   return Math.floor(Math.random() * range);
