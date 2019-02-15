@@ -5,13 +5,14 @@ import fragmentShaderSource from './fragment.glsl';
 
 export default function c(canvas) {
   var image = new Image();
-  image.src = "/leaves.jpg";
+  image.src = process.env.PUBLIC_URL + "/leaves.jpg";
   image.onload = function() {
     render(canvas, image);
   };
 }
 
 export function render(canvas, image) {
+  console.log(process.env)
   const gl = canvas.getContext('webgl');
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
   const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
