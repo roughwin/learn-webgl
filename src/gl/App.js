@@ -1,13 +1,32 @@
 import React, { Component } from 'react';
-
-class App extends Component {
+import c1 from './c1'
+export default class WebGl extends Component {
   render() {
-    return (
-      <div className="App">
-        hello
-     </div>
-    );
+    return <div>
+      <WebGlCanvas initcanvas={c1} />
+    </div>
   }
 }
 
-export default App;
+
+class WebGlCanvas extends Component {
+  render() {
+    const { initcanvas } = this.props;
+    return <div>
+      <canvas
+        style={{
+          border: '1px solid'
+        }}
+        ref={(c) => {
+          if (!c) return;
+          initcanvas(c);
+        }}
+        id="canvas-ex"
+        width="400"
+        height="400"
+      >
+        canvas
+      </canvas>
+    </div>
+  }
+}
