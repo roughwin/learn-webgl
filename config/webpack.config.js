@@ -454,7 +454,7 @@ module.exports = function(webpackEnv) {
               ),
             },
             {
-              test: /\.glsl$/,
+              test: /\.(glsl|gl)$/,
               loader: require.resolve('raw-loader')
             },
             // "file" loader makes sure those assets get served by WebpackDevServer.
