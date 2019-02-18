@@ -12,6 +12,11 @@ const KERNELS = {
     1, 2, 1,
     2, 4, 2,
     1, 2, 1
+  ],
+  normal: [
+    0,0,0,
+    0,1,0,
+    0,0,0,
   ]
 
 }
@@ -27,8 +32,8 @@ export default function c(canvas) {
 function computeKernelWeight(kernel) {
   const weight = kernel.reduce(function(prev, curr) {
     return prev + curr;
-  });
-  return weight <= 0 ? 1: weight;
+  }, 0);
+  return weight <= 0 ? 1 : weight;
 }
 
 export function render(canvas, image) {
@@ -47,9 +52,9 @@ export function render(canvas, image) {
   gl.uniform2f(textureSizeLocation, image.width, image.height);
 
   
-
-  gl.uniform1fv(kernelLocation, KERNELS.edgeDetectKernel);
-  gl.uniform1f(kernelWeightLocation, computeKernelWeight(KERNELS.edgeDetectKernel));
+  const useKernel = KERNELS.normal;
+  gl.uniform1fv(kernelLocation, useKernel);
+  gl.uniform1f(kernelWeightLocation, computeKernelWeight(useKernel));
   var positionBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
   setRectangle(gl, 0, 0, image.width, image.height);
@@ -57,12 +62,12 @@ export function render(canvas, image) {
   var texcoordBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-      0.0,  0.0,
-      1.0,  0.0,
-      0.0,  1.0,
-      0.0,  1.0,
-      1.0,  0.0,
-      1.0,  1.0,
+    0.0,  0.0,
+    1.0,  0.0,
+    0.0,  1.0,
+    0.0,  1.0,
+    1.0,  0.0,
+    1.0,  1.0,
   ]), gl.STATIC_DRAW);
 
   var texture = gl.createTexture();
