@@ -61,13 +61,17 @@ export function render(canvas, image) {
 
   var texcoordBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
+  const coordA = [0.0, 0.0];
+  const coordB = [1.0, 0.0];
+  const coordC = [0.0, 1.0];
+  const coordD = [1.0, 1.0];
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-    0.0,  0.0,
-    1.0,  0.0,
-    0.0,  1.0,
-    0.0,  1.0,
-    1.0,  0.0,
-    1.0,  1.0,
+    ...coordA,
+    ...coordB,
+    ...coordC,
+    ...coordC,
+    ...coordB,
+    ...coordD
   ]), gl.STATIC_DRAW);
 
   var texture = gl.createTexture();
