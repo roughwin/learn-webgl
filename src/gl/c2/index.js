@@ -2,6 +2,19 @@ import { createProgram, createShader } from '../common.js';
 import vertexShaderSource from './vertex.glsl';
 import fragmentShaderSource from './fragment.glsl';
 
+const KERNELS = {
+  edgeDetectKernel: [
+    -1, -1, -1,
+    -1, 8, -1,
+    -1, -1, -1,
+  ],
+  guassianBlur: [
+    1, 2, 1,
+    2, 4, 2,
+    1, 2, 1
+  ]
+
+}
 
 export default function c(canvas) {
   var image = new Image();
@@ -11,8 +24,14 @@ export default function c(canvas) {
   };
 }
 
+function computeKernelWeight(kernel) {
+  const weight = kernel.reduce(function(prev, curr) {
+    return prev + curr;
+  });
+  return weight <= 0 ? 1: weight;
+}
+
 export function render(canvas, image) {
-  console.log(process.env)
   const gl = canvas.getContext('webgl');
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
   const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
@@ -21,6 +40,16 @@ export function render(canvas, image) {
 
   const positionLocation = gl.getAttribLocation(program, "a_position");
   const texcoordLocation = gl.getAttribLocation(program, 'a_texCoord');
+  const kernelLocation = gl.getUniformLocation(program, 'u_kernel[0]');
+  const kernelWeightLocation = gl.getUniformLocation(program, 'u_kernelWeight');
+  const textureSizeLocation = gl.getUniformLocation(program, 'u_textureSize');
+
+  gl.uniform2f(textureSizeLocation, image.width, image.height);
+
+  
+
+  gl.uniform1fv(kernelLocation, KERNELS.edgeDetectKernel);
+  gl.uniform1f(kernelWeightLocation, computeKernelWeight(KERNELS.edgeDetectKernel));
   var positionBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
   setRectangle(gl, 0, 0, image.width, image.height);
