@@ -22,9 +22,9 @@ class TransitionRoutes extends Component {
         }}
         key={this.props.location.pathname}
         classNames={{
-          enter: 'fadeInRight',
+          enter: 'fadeIn',
           enterActive: 'animated',
-          exit: 'fadeOutLeft',
+          exit: 'fadeOut',
           exitActive: 'animated',
         }}
       >
