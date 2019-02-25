@@ -1,13 +1,17 @@
 import * as THREE from 'three';
 
+const _THREEID = '$three';
 
 export default function render(containerEl) {
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(75, 300 / 300, 0.1, 1000);
+  const camera = new THREE.PerspectiveCamera(60, 600 / 400, 0.1, 1000);
   const renderer = new THREE.WebGLRenderer();
+  renderer.domElement.className = _THREEID;
   renderer.shadowMapEnabled = true;
-  renderer.setSize(300, 300);
-  containerEl.appendChild(renderer.domElement);
+  renderer.setSize(600, 400);
+  if (containerEl && !containerEl.getElementsByClassName(_THREEID).length) {
+    containerEl.appendChild(renderer.domElement);
+  }
   const cube = drawCube();
   const axes = new THREE.AxesHelper(20);
   
@@ -18,10 +22,15 @@ export default function render(containerEl) {
   
   camera.position.set(-30, 40, 30);
   camera.lookAt(0,0,0)
+  let i = 0;
   function animate() {
     requestAnimationFrame( animate );
-    cube.rotation.x += 0.001;
-    cube.rotation.y += 0.001;
+    // cube.rotation.x += 0.001;
+    i += 0.01;
+    cube.rotation.z = i;
+    cube.rotation.y = Math.sin(-0.5 * Math.PI * i);
+    cube.material.opacity = Math.abs(Math.sin(Math.PI * i)) + 0.1;
+
     renderer.render( scene, camera );
   }
   animate();
@@ -29,7 +38,7 @@ export default function render(containerEl) {
 
 function drawLight() {
   const spotLight = new THREE.SpotLight(0xffffff);
-  spotLight.position.set(0,100,0);
+  spotLight.position.set(0 ,100, 0);
   spotLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
   spotLight.castShadow = true;
   return spotLight;
@@ -49,9 +58,15 @@ function drawPlane() {
 function drawCube() {
   const geometry = new THREE.BoxGeometry( 10, 10, 10 );
   const material = new THREE.MeshLambertMaterial( {
-    color: 0x00ff00,
-    wireframe: true
+    color: 0xff0000,
+    opacity: 0.5,
+    transparent: true,
+    // wireframe: true
   } );
+  const material2 = new THREE.MeshLambertMaterial({
+    wireframe: true,
+  });
+  // const cube =  THREE.SceneUtils.createMultiMaterialObject(geometry, [material, material2])
   const cube = new THREE.Mesh( geometry, material );
   cube.castShadow = true;
   cube.position.y = 10;
