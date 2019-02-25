@@ -39,7 +39,7 @@ export default function render(containerEl) {
 function drawLight() {
   const spotLight = new THREE.SpotLight(0xffffff);
   spotLight.position.set(0 ,100, 0);
-  spotLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
+  spotLight.shadow.mapSize = new THREE.Vector2(1024 * 4, 1024 * 4);
   spotLight.castShadow = true;
   return spotLight;
 }
@@ -61,7 +61,7 @@ function drawCube() {
     color: 0xff0000,
     opacity: 0.5,
     transparent: true,
-    // wireframe: true
+    wireframe: true
   } );
   const material2 = new THREE.MeshLambertMaterial({
     wireframe: true,
