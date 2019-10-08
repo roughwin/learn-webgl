@@ -1,4 +1,4 @@
-import { createProgram, createShader } from '../common.js';
+import { createProgram, createShader, setViewPort } from '../common.js';
 import vertexShaderSource from './vertex.glsl';
 import fragmentShaderSource from './fragment.glsl';
 
@@ -8,17 +8,14 @@ export default function c1(canvas) {
   const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
   var program = createProgram(gl, vertexShader, fragmentShader);
   gl.useProgram(program);
+  setViewPort(gl);
 
-  var positionAttributeLocation = gl.getAttribLocation(program, "a_position");
-  var resolutionUniformLocation = gl.getUniformLocation(program, 'u_resolution');
-  var colorUniformLocation = gl.getUniformLocation(program, "u_color");
-  var positionBuffer = gl.createBuffer();
+  const positionAttributeLocation = gl.getAttribLocation(program, "a_position");
+  const resolutionUniformLocation = gl.getUniformLocation(program, 'u_resolution');
+  const colorUniformLocation = gl.getUniformLocation(program, "u_color");
+  const positionBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-  // 设置全局变量 分辨率
   gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
-  gl.clearColor(0, 0, 0, 0);
-  gl.clear(gl.COLOR_BUFFER_BIT);
   gl.enableVertexAttribArray(positionAttributeLocation);
 
   // 告诉属性怎么从positionBuffer中读取数据 (ARRAY_BUFFER)
@@ -30,16 +27,19 @@ export default function c1(canvas) {
   var offset = 0;        // 从缓冲起始位置开始读取
   gl.vertexAttribPointer(positionAttributeLocation, size, type, normalize, stride, offset);
 
-  setInterval(() => {
-    randomDraw(gl)
-    randomDraw(gl)
-    randomDraw(gl)
-  }, 1000);
   function randomDraw(gl) {
-    setRecatngle(gl, randomInt(300), randomInt(300), randomInt(300), randomInt(300));
+    // gl.clear(gl.COLOR_BUFFER_BIT);
+    // setRecatngle(gl, randomInt(300), randomInt(300), randomInt(300), randomInt(300));
+    setRecatngle(gl, 10, 20, gl.canvas.width / 2, gl.canvas.height / 2)
     gl.uniform4f(colorUniformLocation, Math.random(), Math.random(), Math.random(), 1);
     gl.drawArrays(gl.TRIANGLES, 0, 6);
   }
+  window.draw = function() {
+    randomDraw(gl)
+  }
+  randomDraw(gl)
+  // randomDraw(gl)
+  // randomDraw(gl)
 }
 
 

@@ -2,11 +2,17 @@
 attribute vec2 a_position;
 uniform vec2 u_resolution;
 
+varying vec4 v_color;
+
+vec2 trans2d(vec2 point) {
+  vec2 x = a_position / u_resolution;
+  vec2 x2 = x * 2.0;
+  return x2 - 1.0;
+}
+
 // 所有着色器都有一个main方法
 void main() {
-  // gl_Position 是一个顶点着色器主要设置的变量
-  vec2 zeroToOne = a_position / u_resolution;
-  vec2 zeroToTwo = zeroToOne * 2.0;
-  vec2 clipSpace = zeroToTwo - 1.0;
-  gl_Position = vec4(clipSpace, 0, 1);
+  vec2 result = trans2d(a_position);
+  gl_Position = vec4(result, 0, 1);
+  v_color = gl_Position * 0.5 + 0.5;
 }

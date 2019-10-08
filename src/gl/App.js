@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import c from './c2'
+import c from './c1'
 export default class WebGl extends Component {
   render() {
     return <div>
@@ -10,17 +10,23 @@ export default class WebGl extends Component {
 
 
 class WebGlCanvas extends Component {
-  render() {
+  constructor() {
+    super();
+    this.canvasEl = React.createRef();
+  }
+  componentDidMount() {
     const { initcanvas } = this.props;
+    if (this.canvasEl.current) {
+      initcanvas(this.canvasEl.current);
+    }
+  }
+  render() {
     return <div>
       <canvas
         style={{
           border: '1px solid'
         }}
-        ref={(c) => {
-          if (!c) return;
-          initcanvas(c);
-        }}
+        ref={this.canvasEl}
         id="canvas-ex"
         width="400"
         height="400"
